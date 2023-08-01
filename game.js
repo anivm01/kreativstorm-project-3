@@ -1,3 +1,4 @@
+alert('Open your console and wait for the game to start')
 const choices = ['rock', 'paper', 'scissors']
 const graphics = {
     rock: `    
@@ -53,39 +54,39 @@ const playerSelection = () => {
 }
 
 
-
-
 const playRound = () => {
     const computerChoice = computerSelection()
     const playerChoice = playerSelection()
+    let message;
+    let winner;
     if ((playerChoice === "rock" && computerChoice === "paper") ||
         (playerChoice === "paper" && computerChoice === "scissors") ||
         (playerChoice === "scissors" && computerChoice === "rock")) {
-        return {
-            playerChoice: graphics[playerChoice],
-            computerChoice: graphics[computerChoice],
-            message: "You lose!" + ` ${computerChoice.toUpperCase()} beats ${playerChoice.toUpperCase()}`,
-            winner: "computer"
-        }
-    } else if ((playerChoice === "rock" && computerChoice === "scissors") || (playerChoice === "paper" && computerChoice === "rock") || (playerChoice === "scissors" && computerChoice === "paper")) {
-        return {
-            playerChoice: graphics[playerChoice],
-            computerChoice: graphics[computerChoice],
-            message: "You win!" + ` ${playerChoice.toUpperCase()} beats ${computerChoice.toUpperCase()}`,
-            winner: "player"
-        }
+
+        message = "You lose!" + ` ${computerChoice.toUpperCase()} beats ${playerChoice.toUpperCase()}`,
+            winner = "computer"
+
+    } else if ((playerChoice === "rock" && computerChoice === "scissors") ||
+        (playerChoice === "paper" && computerChoice === "rock") ||
+        (playerChoice === "scissors" && computerChoice === "paper")) {
+
+        message = "You win!" + ` ${playerChoice.toUpperCase()} beats ${computerChoice.toUpperCase()}`,
+            winner = "player"
+
     } else {
-        return {
-            playerChoice: graphics[playerChoice],
-            computerChoice: graphics[computerChoice],
-            message: "It's a tie" + ` You both chose ${playerChoice.toUpperCase()}`,
-            winner: null
-        }
+        message = "It's a tie" + ` You both chose ${playerChoice.toUpperCase()}`,
+            winner = null
+
+    }
+    return {
+        playerChoice: graphics[playerChoice],
+        computerChoice: graphics[computerChoice],
+        message: message,
+        winner: winner
     }
 }
 
-const logRound = () => {
-    const roundResults = playRound()
+const logRound = (roundResults) => {
     console.log("You Chose:")
     console.log(roundResults.playerChoice)
     console.log("Computer Chose:")
@@ -119,60 +120,53 @@ const game = () => {
     }
 
     for (let i = 0; i < 5; i++) {
-        const roundResults = logRound()
+        const roundResults = playRound()
+        let alertMessage;
         if (roundResults.winner === "player") {
             score.player++
-            if (i === 4) {
-                return alert(`
-                Round: ${i + 1}
-                ${roundResults.message}
-                ${endGame(score)}
-                `)
-            }
-            alert(`
+            logRound(roundResults)
+            alertMessage = `
             Round: ${i + 1}
             ${roundResults.message}
             The current score is:
             Player: ${score.player}
             Computer: ${score.computer}
-            `)
+            `
         } else if (roundResults.winner === "computer") {
             score.computer++
-            if (i === 4) {
-                return alert(`
-                Round: ${i + 1}
-                ${roundResults.message}
-                ${endGame(score)}
-                `)
-            }
-            alert(`
+            logRound(roundResults)
+            alertMessage = `
             Round: ${i + 1}
             ${roundResults.message}
             The current score is:
             Player: ${score.player}
             Computer: ${score.computer}
-            `)
+            `
         } else {
-            if (i === 4) {
-                return alert(`
-                Round: ${i + 1}
-                ${roundResults.message}
-                ${endGame(score)}
-                `)
-            }
-            alert(`
+            logRound(roundResults)
+            alertMessage = `
             Round: ${i + 1}
             ${roundResults.message}
             The current score is:
             Player: ${score.player}
             Computer: ${score.computer}
-            `)
+            `
         }
+        if (i === 4) {
+            alert(`
+            Round: ${i + 1}
+            ${roundResults.message}
+            ${endGame(score)}
+            `)
+            break
+        }
+        alert(alertMessage)
     }
 
-    return
+    const playAgain = confirm("Play again?")
+    return playAgain ? game() : alert("Thanks for playing!")
 }
 
-game()
+setTimeout(() => { game() }, 3000)
 
 
