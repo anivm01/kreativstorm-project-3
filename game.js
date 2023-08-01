@@ -1,4 +1,3 @@
-alert("Open your console and click okay to begin the game")
 const choices = ['rock', 'paper', 'scissors']
 const graphics = {
     rock: `    
