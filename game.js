@@ -31,7 +31,7 @@ const emojis = {
 
 }
 
-const computerMove = () => {
+const computerChoice = () => {
     const choice = Math.floor(Math.random() * 3)
     return choices[choice]
 };
@@ -51,12 +51,12 @@ const validatePlayerInput = () => {
     }
 }
 
-const playerMove = () => {
+const playerChoice = () => {
     const selection = validatePlayerInput()
     if (selection.validity) {
         return selection.input.toLowerCase()
     } else {
-        return playerMove()
+        return playerChoice()
     }
 }
 
@@ -127,8 +127,8 @@ const game = () => {
     }
 
     for (let i = 0; i < 5; i++) {
-        const computerSelection = computerMove()
-        const playerSelection = playerMove()
+        const computerSelection = computerChoice()
+        const playerSelection = playerChoice()
         const roundResults = playRound(playerSelection, computerSelection)
         let alertMessage;
         let roundNumber
