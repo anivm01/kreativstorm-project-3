@@ -31,7 +31,7 @@ const emojis = {
 
 }
 
-const computerSelection = () => {
+const computerMove = () => {
     const choice = Math.floor(Math.random() * 3)
     return choices[choice]
 };
@@ -51,43 +51,42 @@ const validatePlayerInput = () => {
     }
 }
 
-const playerSelection = () => {
+const playerMove = () => {
     const selection = validatePlayerInput()
     if (selection.validity) {
         return selection.input.toLowerCase()
     } else {
-        return playerSelection()
+        return playerMove()
     }
 }
 
 
-const playRound = () => {
-    const computerChoice = computerSelection()
-    const playerChoice = playerSelection()
+const playRound = (playerSelection, computerSelection) => {
+
     let message;
     let winner;
-    if ((playerChoice === "rock" && computerChoice === "paper") ||
-        (playerChoice === "paper" && computerChoice === "scissors") ||
-        (playerChoice === "scissors" && computerChoice === "rock")) {
+    if ((playerSelection === "rock" && computerSelection === "paper") ||
+        (playerSelection === "paper" && computerSelection === "scissors") ||
+        (playerSelection === "scissors" && computerSelection === "rock")) {
 
-        message = "You lose!" + ` ${computerChoice.toUpperCase()} ${emojis[computerChoice]} beats ${playerChoice.toUpperCase()} ${emojis[playerChoice]}`,
+        message = "You lose!" + ` ${computerSelection.toUpperCase()} ${emojis[computerSelection]} beats ${playerSelection.toUpperCase()} ${emojis[playerSelection]}`,
             winner = "computer"
 
-    } else if ((playerChoice === "rock" && computerChoice === "scissors") ||
-        (playerChoice === "paper" && computerChoice === "rock") ||
-        (playerChoice === "scissors" && computerChoice === "paper")) {
+    } else if ((playerSelection === "rock" && computerSelection === "scissors") ||
+        (playerSelection === "paper" && computerSelection === "rock") ||
+        (playerSelection === "scissors" && computerSelection === "paper")) {
 
-        message = "You win!" + ` ${playerChoice.toUpperCase()} ${emojis[playerChoice]} beats ${computerChoice.toUpperCase()} ${emojis[computerChoice]}`,
+        message = "You win!" + ` ${playerSelection.toUpperCase()} ${emojis[playerSelection]} beats ${computerSelection.toUpperCase()} ${emojis[computerSelection]}`,
             winner = "player"
 
     } else {
-        message = "It's a tie" + ` You both chose ${playerChoice.toUpperCase()} ${emojis[playerChoice]}`,
+        message = "It's a tie" + ` You both chose ${playerSelection.toUpperCase()} ${emojis[playerSelection]}`,
             winner = null
 
     }
     return {
-        playerChoice: graphics[playerChoice],
-        computerChoice: graphics[computerChoice],
+        playerSelection: graphics[playerSelection],
+        computerSelection: graphics[computerSelection],
         message: message,
         winner: winner
     }
@@ -96,9 +95,9 @@ const playRound = () => {
 const logRound = (roundResults, roundNumber) => {
     console.log(`Round: ${roundNumber}`)
     console.log("You Chose:")
-    console.log(roundResults.playerChoice)
+    console.log(roundResults.playerSelection)
     console.log("Computer Chose:")
-    console.log(roundResults.computerChoice)
+    console.log(roundResults.computerSelection)
     console.log(roundResults.message)
     return roundResults
 }
@@ -128,7 +127,9 @@ const game = () => {
     }
 
     for (let i = 0; i < 5; i++) {
-        const roundResults = playRound()
+        const computerSelection = computerMove()
+        const playerSelection = playerMove()
+        const roundResults = playRound(playerSelection, computerSelection)
         let alertMessage;
         let roundNumber
         if (roundResults.winner === "player") {
