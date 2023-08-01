@@ -1,4 +1,28 @@
+alert("Open your console and click okay to begin the game")
 const choices = ['rock', 'paper', 'scissors']
+const graphics = {
+    rock: `    
+        _______
+    ---'   ____)
+          (_____)
+          (_____)
+          (____)
+    ---.__(___)`,
+    paper: `     
+         _______
+    ---'    ____)____
+               ______)
+              _______)
+             _______)
+    ---.__________)`,
+    scissors: `   
+        _______
+    ---'   ____)____
+              ______)
+           __________)
+          (____)
+    ---.__(___)`
+}
 
 const computerSelection = () => {
     const choice = Math.floor(Math.random() * 3)
@@ -29,29 +53,7 @@ const playerSelection = () => {
     }
 }
 
-const graphics = {
-    rock: `    
-        _______
-    ---'   ____)
-          (_____)
-          (_____)
-          (____)
-    ---.__(___)`,
-    paper: `     
-         _______
-    ---'    ____)____
-               ______)
-              _______)
-             _______)
-    ---.__________)`,
-    scissors: `   
-        _______
-    ---'   ____)____
-              ______)
-           __________)
-          (____)
-    ---.__(___)`
-}
+
 
 
 const playRound = () => {
