@@ -1,4 +1,7 @@
-const welcome_message =
+const getRandomIndex = (arrayToChooseFrom) => {
+    return Math.floor(Math.random() * arrayToChooseFrom.length)
+}
+const weclomeMessage =
     'Welcome Challenger!\n' +
     'In this game you are going to play against me, Bob.\n' +
     'I am a bot well trained to play rock-paper-scissors and ready to beat you. ' +
@@ -6,7 +9,7 @@ const welcome_message =
     'Type "start" to start an all out game of 5 rounds against me, the mighty Bob!'
 
 const getBobMessage = () => {
-    const bob_messages = [
+    const bobMessages = [
         'Seriously, just type "start" to begin the rock-paper-scissors duel already!',
         'I"m waiting... Type "start" if you want to take on the challenge!',
         'Come on, it"s just one word! Type "start" to start the game!',
@@ -18,12 +21,11 @@ const getBobMessage = () => {
         'I won"t give up! Keep trying and type "start" to accept the challenge!',
         'Alright, I"ll wait a little longer, but please, just type "start" to play!'
     ]
-    const random_index = Math.floor(Math.random() * bob_messages.length);
-    return bob_messages[random_index];
+    return bobMessages[getRandomIndex(bobMessages)];
 }
 
 const getErrorMessage = () => {
-    const error_messages = [
+    const errorMessages = [
         "Hey there! Remember, it's 'rock,' 'paper,' or 'scissors.' Let's not keep me waiting!",
         "Oi! I'm eager to start. Just type 'rock,' 'paper,' or 'scissors' to play.",
         "Don't leave me hanging. Choose 'rock,' 'paper,' or 'scissors' to begin!",
@@ -35,8 +37,7 @@ const getErrorMessage = () => {
         "Attention, please! It's 'rock,' 'paper,' or 'scissors' time. Don't keep me waiting!",
         "Seriously? It's as easy as 'rock,' 'paper,' or 'scissors.' Give it a try already!"
     ]
-    const random_index = Math.floor(Math.random() * error_messages.length);
-    return error_messages[random_index];
+    return errorMessages[getRandomIndex(errorMessages)];
 }
 
 const choices = ['rock', 'paper', 'scissors']
@@ -73,19 +74,20 @@ const emojis = {
 }
 
 const bobChoice = () => {
-    const choice = Math.floor(Math.random() * 3)
-    return choices[choice]
+    return choices[getRandomIndex(choices)]
 };
 
 const validatePlayerInput = () => {
     const input = prompt("Rock, Paper, Scissors. 1, 2, 3! I choose:")
     let validity;
-    if (input !== null && choices.includes(input.toLowerCase())) {
+    if (input !== null && choices.includes(input.toLowerCase().trim())) {
         validity = true
-    } else {
+    } else if (input === null) {
+        validity = null
+    }
+    else {
         validity = false
     }
-
     return {
         validity: validity,
         input: input
@@ -95,8 +97,17 @@ const validatePlayerInput = () => {
 const playerChoice = () => {
     const selection = validatePlayerInput()
     if (selection.validity) {
-        return selection.input.toLowerCase()
-    } else {
+        return selection.input.toLowerCase().trim()
+    } else if (selection.validity === null) {
+        const confirmCancelation = confirm("If you really want to cancel the game and admit you're a coward click okay. Or cancel your cancelation and let's keep going!")
+        if (confirmCancelation) {
+            return selection.input
+        }
+        else {
+            return playerChoice()
+        }
+    }
+    else {
         alert(getErrorMessage())
         return playerChoice()
     }
@@ -169,6 +180,9 @@ const game = () => {
     for (let i = 0; i < 5; i++) {
         const bobSelection = bobChoice()
         const playerSelection = playerChoice()
+        if (playerSelection === null) {
+            break
+        }
         const roundResults = playRound(playerSelection, bobSelection)
         let alertMessage;
         let roundNumber
@@ -223,20 +237,30 @@ const game = () => {
 const checkValidityToStart = (message) => {
     let input = prompt(message);
     let validity;
-    if (input === null || !input.trim() || (input.trim().toLowerCase() !== 'start')) {
-        validity = false
-    } else {
+    if (input !== null && (input.trim().toLowerCase() === 'start')) {
         validity = true
+    } else if (input === null) {
+        validity = null
+    }
+    else {
+        validity = false
     }
     return validity;
 }
 
 const startGame = () => {
-    let validity = checkValidityToStart(welcome_message);
+    let validity = checkValidityToStart(weclomeMessage);
 
     if (validity) {
         alert("Starting game!\nOpen your console and wait for the game to start")
         setTimeout(() => { game() }, 3000)
+    } else if (validity === null) {
+        const startCancelation = confirm("If you really want to cancel the game and admit you're a coward click okay. Or cancel your cancelation and let's keep going!")
+        if (startCancelation) {
+            return
+        } else {
+            return startGame();
+        }
     } else {
         alert(getBobMessage());
         return startGame();
