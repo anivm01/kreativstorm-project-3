@@ -1,4 +1,3 @@
-
 const choices = ['rock', 'paper', 'scissors']
 const graphics = {
     rock: `    
@@ -36,6 +35,23 @@ const computerChoice = () => {
     return choices[choice]
 };
 
+function getErrorMessage() {
+    const error_messages = [
+        "Hey there! Remember, it's 'rock,' 'paper,' or 'scissors.' Let's not keep me waiting!",
+        "Oi! I'm eager to start. Just type 'rock,' 'paper,' or 'scissors' to play.",
+        "Don't leave me hanging. Choose 'rock,' 'paper,' or 'scissors' to begin!",
+        "The game is on. Input 'rock,' 'paper,' or 'scissors' and let's go!",
+        "I'm ready for action. Your move: 'rock,' 'paper,' or 'scissors'?",
+        "Listen up! Type 'rock,' 'paper,' or 'scissors' and let's get this show on the road.",
+        "Alright, let's play fair. Just say 'rock,' 'paper,' or 'scissors' to join the game.",
+        "I'm waiting... 'rock,' 'paper,' or 'scissors' — take your pick and let's play!",
+        "Attention, please! It's 'rock,' 'paper,' or 'scissors' time. Don't keep me waiting!",
+        "Seriously? It's as easy as 'rock,' 'paper,' or 'scissors.' Give it a try already!"
+    ]
+    const random_index = Math.floor(Math.random() * error_messages.length);
+    return error_messages[random_index];
+}
+
 const validatePlayerInput = () => {
     const input = prompt("Rock, Paper, Scissors. 1, 2, 3! I choose:")
     let validity;
@@ -56,6 +72,7 @@ const playerChoice = () => {
     if (selection.validity) {
         return selection.input.toLowerCase()
     } else {
+        alert(getErrorMessage())
         return playerChoice()
     }
 }
@@ -180,7 +197,51 @@ const game = () => {
     return playAgain ? game() : alert("Thanks for playing!")
 }
 
-alert("Open your console and wait for the game to start")
-setTimeout(() => { game() }, 3000)
+const welcome_message =
+    'Welcome Challenger!\n' +
+    'In this game you are going to play against me, Bob.\n' +
+    'I am a bot well trained to play rock-paper-scissors and ready to beat you. ' +
+    'I recommend you to open the browser console to keep up with the game.\n' +
+    'Type "start" to start an all out best of 5 against me, the mighty Bob!'
 
+function getBobMessage() {
+    const bob_messages = [
+        'Seriously, just type "start" to begin the rock-paper-scissors duel already!',
+        'I"m waiting... Type "start" if you want to take on the challenge!',
+        'Come on, it"s just one word! Type "start" to start the game!',
+        'Hmm, did you forget? It"s "start" to play rock-paper-scissors with me!',
+        'I"m losing my patience here... Please type "start" and let"s get this going!',
+        'Are you there? Type "start" to join the rock-paper-scissors duel!',
+        'I"m ready for action. Now it"s your turn to type "start"!',
+        'Time is ticking... Type "start" if you want to duel!',
+        'I won"t give up! Keep trying and type "start" to accept the challenge!',
+        'Alright, I"ll wait a little longer, but please, just type "start" to play!'
+    ]
+    const random_index = Math.floor(Math.random() * bob_messages.length);
+    return bob_messages[random_index];
+}
 
+const checkValidityToStart = (message) => {
+    let input = prompt(message);
+    let validity;
+    if (input === null || !input.trim() || (input.trim().toLowerCase() !== 'start')) {
+        validity = false
+    } else {
+        validity = true
+    }
+    return validity;
+}
+
+const startGame = () => {
+    let validity = checkValidityToStart(welcome_message);
+
+    if (validity) {
+        alert("Starting game!\nOpen your console and wait for the game to start")
+        setTimeout(() => { game() }, 3000)
+    } else {
+        alert(getBobMessage());
+        return startGame();
+    }
+}
+
+startGame();
